@@ -20,6 +20,7 @@ mono_crash.*
 .vscode/
 *.sln
 *.vcxproj
+*.csproj
 *.vcxproj.filters
 *.dll
 
