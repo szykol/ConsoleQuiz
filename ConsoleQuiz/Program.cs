@@ -31,9 +31,14 @@ namespace Project
                 }
 
                 Console.Write("> ");
-                var index = int.Parse(Console.ReadLine());
+                int index;
+                while (!int.TryParse(Console.ReadLine(), out index) || answers.ElementAtOrDefault(index - 1) == null)
+                {
+                    Console.WriteLine("Enter a correct number!");
+                    Console.Write("> ");
+                }
 
-                if(answers[index - 1] == question.correct_answer)
+                if (answers[index - 1] == question.correct_answer)
                 {
                     Console.WriteLine("Correct!");
                 }
@@ -41,6 +46,8 @@ namespace Project
                 {
                     Console.WriteLine("Incorrect!");
                 }
+                Console.ReadLine();
+                Console.Clear();
             }
 
             // Bad Boys
