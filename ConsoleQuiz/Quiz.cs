@@ -22,7 +22,27 @@ namespace ConsoleQuiz
             var categoryIndex = FetchIndexFromList(categories, (cat) => cat.name);
             var categoryID = categories[categoryIndex].id;
 
-            var url = $"https://opentdb.com/api.php?amount=51&category={categoryID}";
+            Console.Clear();
+            Console.Write("Amount of questions: ");
+            uint amount;
+            while (!uint.TryParse(Console.ReadLine(), out amount))
+            {
+                Console.WriteLine("Enter a valid number!");
+                Console.Write("Amount of questions: ");
+            }
+
+            var diffs = new List<string> { "Easy", "Medium", "Hard", "Any"};
+            Console.Clear();
+            Console.WriteLine("Choose your difficulty");
+            var diffIndex = FetchIndexFromList(diffs);
+
+            var url = $"https://opentdb.com/api.php?amount={amount}&category={categoryID}";
+
+            if (diffs[diffIndex] != "Any")
+            {
+                url += $"&difficulty={diffs[diffIndex].ToLower()}";
+            }
+            
             var response = DownloadQuestions(url);
 
             if (response.response_code != 0)
