@@ -93,7 +93,7 @@ namespace ConsoleQuiz
         {
             Console.Write("> ");
             int index;
-            while (!int.TryParse(Console.ReadLine(), out index) || !(index >= 0 && index < list.Count))
+            while (!int.TryParse(Console.ReadLine(), out index) || !(index > 0 && index <= list.Count))
             {
                 Console.WriteLine("Enter a correct number!");
                 Console.Write("> ");
