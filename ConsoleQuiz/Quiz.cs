@@ -10,7 +10,6 @@ namespace ConsoleQuiz
 {
     class Quiz
     {
-        QuizResponse quizReponse;
         Random random = new Random();
         int questionNumber = 1;
 
