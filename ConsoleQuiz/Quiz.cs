@@ -22,8 +22,13 @@ namespace ConsoleQuiz
             var categoryIndex = FetchIndexFromList(categories, (cat) => cat.name);
             var categoryID = categories[categoryIndex].id;
 
-            var url = $"https://opentdb.com/api.php?amount=10&category={categoryID}";
+            var url = $"https://opentdb.com/api.php?amount=51&category={categoryID}";
             var response = DownloadQuestions(url);
+
+            if (response.response_code != 0)
+            {
+                ExitApp("Invalid response. Questions could not be downloaded.");
+            }
 
             foreach (QuizQuestion question in response.results)
             {
@@ -47,7 +52,7 @@ namespace ConsoleQuiz
         }
         QuizResponse DownloadQuestions(string url)
         {
-            var json = new WebClient().DownloadString(url);
+            var json = FetchJSON(url);
             var m = JsonConvert.DeserializeObject<QuizResponse>(json);
 
             return m;
@@ -55,7 +60,7 @@ namespace ConsoleQuiz
 
         CategoriesList DownloadCategories()
         {
-            var json = new WebClient().DownloadString("https://opentdb.com/api_category.php");
+            var json = FetchJSON("https://opentdb.com/api_category.php");
             var categories = JsonConvert.DeserializeObject<CategoriesList>(json);
 
             return categories;
@@ -95,6 +100,34 @@ namespace ConsoleQuiz
             }
 
             return index - 1;
+        }
+
+        string FetchJSON(string url)
+        {
+            try
+            {
+                var json = new WebClient().DownloadString(url);
+                return json;
+            }
+            catch (WebException we)
+            {
+                ExitApp(we.Message);
+            }
+
+            return null;
+        }
+
+        void ExitApp(params string[] messages)
+        {
+            Console.Clear();
+            foreach (var msg in messages)
+            {
+                Console.WriteLine(msg);
+            }
+            Console.WriteLine("An error has occured");
+            Console.WriteLine("Press any key to exit");
+            Console.ReadKey();
+            Environment.Exit(-1);
         }
     }
 }
