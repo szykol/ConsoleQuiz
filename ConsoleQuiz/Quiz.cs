@@ -13,24 +13,27 @@ namespace ConsoleQuiz
         Random random = new Random();
         int questionNumber = 1;
 
+        public delegate object toPrint<T>(T obj);
+
         public void Start()
         {
-            var url = "https://opentdb.com/api.php?amount=10&category=18";
-            var response = DownloadData(url);
+            var categories = DownloadCategories().trivia_categories;
+            Console.WriteLine("Choose your category");
+            var categoryIndex = FetchIndexFromList(categories, (cat) => cat.name);
+            var categoryID = categories[categoryIndex].id;
+
+            var url = $"https://opentdb.com/api.php?amount=10&category={categoryID}";
+            var response = DownloadQuestions(url);
 
             foreach (QuizQuestion question in response.results)
             {
+                Console.Clear();
+
                 Console.WriteLine($"Question #{questionNumber++}: {question.question}");
 
                 var answers = CreateResultsList(question);
 
-                var i = 0;
-                foreach (var answer in answers)
-                {
-                    Console.WriteLine($"{++i}. {answer}");
-                }
-
-                var index = FetchAnswerIndex(answers);
+                var index = FetchIndexFromList(answers);
 
                 if (answers[index] == question.correct_answer)
                     Console.WriteLine("Correct!");
@@ -38,18 +41,26 @@ namespace ConsoleQuiz
                     Console.WriteLine("Incorrect!");
 
                 Console.ReadLine();
-                Console.Clear();
             }
 
             Console.ReadLine();
         }
-        QuizResponse DownloadData(string url)
+        QuizResponse DownloadQuestions(string url)
         {
             var json = new WebClient().DownloadString(url);
             var m = JsonConvert.DeserializeObject<QuizResponse>(json);
 
             return m;
         }
+
+        CategoriesList DownloadCategories()
+        {
+            var json = new WebClient().DownloadString("https://opentdb.com/api_category.php");
+            var categories = JsonConvert.DeserializeObject<CategoriesList>(json);
+
+            return categories;
+        }
+
         List<string> CreateResultsList(QuizQuestion q)
         {
             var answers = new List<string>();
@@ -59,11 +70,25 @@ namespace ConsoleQuiz
             return answers;
         }
 
-        int FetchAnswerIndex(List<string> answers)
+        int FetchIndexFromList<T>(List<T> list, toPrint<T> f = null)
+        {
+            var i = 0;
+            foreach (var element in list)
+            {
+                if (f != null)
+                    Console.WriteLine($"{++i}. {f(element)}");
+                else
+                    Console.WriteLine($"{++i}. {element}");
+            }
+
+            return FetchFromConsole(list);
+        }
+
+        int FetchFromConsole<T>(List<T> list)
         {
             Console.Write("> ");
             int index;
-            while (!int.TryParse(Console.ReadLine(), out index) || answers.ElementAtOrDefault(index - 1) == null)
+            while (!int.TryParse(Console.ReadLine(), out index) || !(index >= 0 && index < list.Count))
             {
                 Console.WriteLine("Enter a correct number!");
                 Console.Write("> ");
