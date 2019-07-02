@@ -16,9 +16,10 @@ namespace Project
             var json = new WebClient().DownloadString("https://opentdb.com/api.php?amount=10&category=18");
             var m = JsonConvert.DeserializeObject<QuizResponse>(json);
             var random = new Random();
+            var questionNumber = 1;
             foreach (QuizQuestion question in m.results)
             {
-                Console.WriteLine(question.question);
+                Console.WriteLine($"Question #{questionNumber++}: {question.question}");
 
                 var answers = new List<string>();
                 answers.AddRange(question.incorrect_answers);
