@@ -10,15 +10,14 @@ namespace ConsoleQuiz
 {
     public class QuizAPI
     {
+        public enum Difficulty { ANY = 0, EASY, MEDIUM, HARD };
         List<CategoriesList.Category> categoriesList = null;
         QuizQuestion[] questionList = null;
         string url = $"https://opentdb.com/api.php?";
 
         int categoryIndex = 0;
         int questionAmount = 10;
-        int difficultyIndex = 0;
-
-        static List<string> difficulties = new List<string> { "Any", "Easy", "Medium", "Hard" };
+        Difficulty difficulty = Difficulty.ANY;
 
         public List<string> GetCategoryList()
         {
@@ -57,22 +56,14 @@ namespace ConsoleQuiz
             }
         }
 
-        public List<string> GetDifficultiesList()
+        public void SetDifficulty(Difficulty d)
         {
-            return difficulties;
+            difficulty = d;
         }
 
-        public void SetDifficulty(int difficultyListIndex)
+        public Difficulty GetDifficulty()
         {
-            if (difficultyListIndex > 0 && difficultyListIndex <= difficulties.Count)
-            {
-                difficultyIndex = difficultyListIndex;
-            }
-        }
-
-        public int GetDifficulty()
-        {
-            return difficultyIndex;
+            return difficulty;
         }
 
         public static void ExitApp(params string[] messages)
@@ -116,7 +107,6 @@ namespace ConsoleQuiz
 
             return response.results;
         }
-
         
         string GenerateAPIUrl()
         {
@@ -128,12 +118,8 @@ namespace ConsoleQuiz
                 url += $"&category={category.id}";
             }
 
-            var difficulty = difficulties[difficultyIndex];
-
-            if (difficulty != "Any")
-            {
-                url += $"&difficulty={difficulty.ToLower()}";
-            }
+            if (difficulty != Difficulty.ANY)
+                url += $"&difficulty={difficulty.ToString().ToLower()}";
 
             url += $"&amount={questionAmount}";
 

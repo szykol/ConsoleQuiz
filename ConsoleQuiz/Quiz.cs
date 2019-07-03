@@ -32,12 +32,12 @@ namespace ConsoleQuiz
             }
             quizApi.SetQuestionAmount(amount);
 
-            var diffs = quizApi.GetDifficultiesList();
+            var diffs = Enum.GetValues(typeof(QuizAPI.Difficulty)).Cast<QuizAPI.Difficulty>().ToList();
             Console.Clear();
             Console.WriteLine("Choose your difficulty");
             var diffIndex = FetchIndexFromList(diffs);
 
-            quizApi.SetDifficulty(diffIndex);
+            quizApi.SetDifficulty((QuizAPI.Difficulty)diffIndex);
 
             var response = quizApi.GetQuestions();
 
