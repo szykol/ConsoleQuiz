@@ -49,6 +49,31 @@ namespace ConsoleQuiz.UnitTests
             Assert.AreEqual(0, api.GetCategory());
         }
 
-        
+        [TestMethod]
+        public void SetDifficulty_ChangesState()
+        {
+            QuizAPI api = new QuizAPI();
+
+            api.SetDifficulty(QuizAPI.Difficulty.HARD);
+            Assert.AreEqual(QuizAPI.Difficulty.HARD, api.GetDifficulty());
+        }
+
+        [TestMethod]
+        public void SetQuestionAmount_ChangesState()
+        {
+            QuizAPI api = new QuizAPI();
+
+            api.SetQuestionAmount(15);
+            Assert.AreEqual(15, api.GetQuestionAmount());
+        }
+
+        [TestMethod]
+        public void SetQuestionAmount_WithIncorrectValue_DoesntChangeState()
+        {
+            QuizAPI api = new QuizAPI();
+
+            api.SetQuestionAmount(-5);
+            Assert.AreEqual(10, api.GetQuestionAmount());
+        }
     }
 }
