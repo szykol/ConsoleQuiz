@@ -75,5 +75,21 @@ namespace ConsoleQuiz.UnitTests
             api.SetQuestionAmount(-5);
             Assert.AreEqual(10, api.GetQuestionAmount());
         }
+
+        [TestMethod]
+        public void GetQuestions_WithAmount_DownloadsCorrectAmountOfQuestions()
+        {
+            QuizAPI api = new QuizAPI();
+
+            api.SetQuestionAmount(20);
+            var data = api.GetQuestions();
+
+            Assert.AreEqual(20, data.Length);
+
+            api.SetQuestionAmount(5);
+            data = api.GetQuestions();
+
+            Assert.AreEqual(5, data.Length);
+        }
     }
 }
