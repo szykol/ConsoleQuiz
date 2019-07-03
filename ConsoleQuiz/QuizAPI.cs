@@ -85,6 +85,11 @@ namespace ConsoleQuiz
             return questionList;
         }
 
+        public QuestionManager GetQuestionManager()
+        {
+            return new QuestionManager(DownloadQuestions());
+        }
+
         CategoriesList DownloadCategories()
         {
             var json = FetchJSON("https://opentdb.com/api_category.php");
