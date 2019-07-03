@@ -39,6 +39,11 @@ namespace ConsoleQuiz
             }
         }
 
+        public int GetCategory()
+        {
+            return categoryIndex;
+        }
+
         public int GetQuestionAmount()
         {
             return questionAmount;
@@ -63,6 +68,11 @@ namespace ConsoleQuiz
             {
                 difficultyIndex = difficultyListIndex;
             }
+        }
+
+        public int GetDifficulty()
+        {
+            return difficultyIndex;
         }
 
         public static void ExitApp(params string[] messages)
