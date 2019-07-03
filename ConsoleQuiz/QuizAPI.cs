@@ -18,7 +18,7 @@ namespace ConsoleQuiz
         static int questionAmount = 10;
         static int difficultyIndex = 0;
 
-        private static List<string> difficulties = new List<string> { "Any", "Easy", "Medium", "Hard" };
+        static List<string> difficulties = new List<string> { "Any", "Easy", "Medium", "Hard" };
 
         public static List<string> GetCategoryList()
         {
@@ -65,7 +65,24 @@ namespace ConsoleQuiz
             }
         }
 
+        public static void ExitApp(params string[] messages)
+        {
+            Console.Clear();
+            foreach (var msg in messages)
+            {
+                Console.WriteLine(msg);
+            }
+            Console.WriteLine("An error has occured");
+            Console.WriteLine("Press any key to exit");
+            Console.ReadKey();
+            Environment.Exit(-1);
+        }
 
+        public static QuizQuestion[] GetQuestions()
+        {
+            questionList = DownloadQuestions();
+            return questionList;
+        }
 
         static CategoriesList DownloadCategories()
         {
@@ -90,12 +107,7 @@ namespace ConsoleQuiz
             return response.results;
         }
 
-        public static QuizQuestion[] GetQuestions()
-        {
-            questionList = DownloadQuestions();
-            return questionList;
-        }
-
+        
         static string GenerateAPIUrl()
         {
             var category = categoriesList[categoryIndex];
@@ -131,18 +143,6 @@ namespace ConsoleQuiz
             }
 
             return null;
-        }
-        public static void ExitApp(params string[] messages)
-        {
-            Console.Clear();
-            foreach (var msg in messages)
-            {
-                Console.WriteLine(msg);
-            }
-            Console.WriteLine("An error has occured");
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
-            Environment.Exit(-1);
         }
     }
 }
