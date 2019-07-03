@@ -39,24 +39,28 @@ namespace ConsoleQuiz
 
             quizApi.SetDifficulty((QuizAPI.Difficulty)diffIndex);
 
-            var response = quizApi.GetQuestions();
-
-            foreach (QuizQuestion question in response)
+            var qManager = quizApi.GetQuestionManager();
+            while(qManager.HasNextQuestion())
             {
                 Console.Clear();
 
-                Console.WriteLine($"Question #{questionNumber++}: {question.question}");
+                var question = qManager.NextQuestion();
+                Console.WriteLine($"Question #{questionNumber++}: {question.question} | Score [{qManager.Score}/{qManager.Count}]");
+
                 var answers = CreateResultsList(question);
                 var index = FetchIndexFromList(answers);
 
-                if (answers[index] == question.correct_answer)
+                if (qManager.CheckAnswer(answers[index]))
                     Console.WriteLine("Correct!");
                 else
-                    Console.WriteLine("Incorrect!");
+                    Console.WriteLine("Incorrect");
 
                 Console.ReadLine();
+
             }
 
+            Console.Clear();
+            Console.WriteLine($"Good Game. Your score is {qManager.Score}");
             Console.ReadLine();
         }
 
