@@ -17,10 +17,18 @@ namespace ConsoleQuiz
 
         public void Start()
         {
+            var url = $"https://opentdb.com/api.php";
+
             var categories = DownloadCategories().trivia_categories;
+            categories.Insert(0, new CategoriesList.Category { name = "Any" });
+
             Console.WriteLine("Choose your category");
             var categoryIndex = FetchIndexFromList(categories, (cat) => cat.name);
-            var categoryID = categories[categoryIndex].id;
+            if (categories[categoryIndex].name != "Any")
+            {
+                var categoryID = categories[categoryIndex].id;
+                url += $"&category={categoryID}";
+            }
 
             Console.Clear();
             Console.Write("Amount of questions: ");
@@ -36,7 +44,7 @@ namespace ConsoleQuiz
             Console.WriteLine("Choose your difficulty");
             var diffIndex = FetchIndexFromList(diffs);
 
-            var url = $"https://opentdb.com/api.php?amount={amount}&category={categoryID}";
+            url += $"?amount={amount}"; 
 
             if (diffs[diffIndex] != "Any")
             {
