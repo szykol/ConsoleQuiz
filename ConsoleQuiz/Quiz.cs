@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Net;
 
 namespace ConsoleQuiz
 {
@@ -17,55 +15,37 @@ namespace ConsoleQuiz
 
         public void Start()
         {
-            var url = $"https://opentdb.com/api.php";
-
-            var categories = DownloadCategories().trivia_categories;
-            categories.Insert(0, new CategoriesList.Category { name = "Any" });
+            var categories = QuizAPI.GetCategoryList();
 
             Console.WriteLine("Choose your category");
-            var categoryIndex = FetchIndexFromList(categories, (cat) => cat.name);
-            if (categories[categoryIndex].name != "Any")
-            {
-                var categoryID = categories[categoryIndex].id;
-                url += $"&category={categoryID}";
-            }
+            var categoryIndex = FetchIndexFromList(categories);
+            QuizAPI.SetCategory(categoryIndex);
 
             Console.Clear();
             Console.Write("Amount of questions: ");
-            uint amount;
-            while (!uint.TryParse(Console.ReadLine(), out amount))
+            int amount;
+            while (!int.TryParse(Console.ReadLine(), out amount))
             {
                 Console.WriteLine("Enter a valid number!");
                 Console.Write("Amount of questions: ");
             }
+            QuizAPI.SetQuestionAmount(amount);
 
-            var diffs = new List<string> { "Easy", "Medium", "Hard", "Any"};
+            var diffs = QuizAPI.GetDifficultiesList();
             Console.Clear();
             Console.WriteLine("Choose your difficulty");
             var diffIndex = FetchIndexFromList(diffs);
 
-            url += $"?amount={amount}"; 
+            QuizAPI.SetDifficulty(diffIndex);
 
-            if (diffs[diffIndex] != "Any")
-            {
-                url += $"&difficulty={diffs[diffIndex].ToLower()}";
-            }
-            
-            var response = DownloadQuestions(url);
+            var response = QuizAPI.GetQuestions();
 
-            if (response.response_code != 0)
-            {
-                ExitApp("Invalid response. Questions could not be downloaded.");
-            }
-
-            foreach (QuizQuestion question in response.results)
+            foreach (QuizQuestion question in response)
             {
                 Console.Clear();
 
                 Console.WriteLine($"Question #{questionNumber++}: {question.question}");
-
                 var answers = CreateResultsList(question);
-
                 var index = FetchIndexFromList(answers);
 
                 if (answers[index] == question.correct_answer)
@@ -77,21 +57,6 @@ namespace ConsoleQuiz
             }
 
             Console.ReadLine();
-        }
-        QuizResponse DownloadQuestions(string url)
-        {
-            var json = FetchJSON(url);
-            var m = JsonConvert.DeserializeObject<QuizResponse>(json);
-
-            return m;
-        }
-
-        CategoriesList DownloadCategories()
-        {
-            var json = FetchJSON("https://opentdb.com/api_category.php");
-            var categories = JsonConvert.DeserializeObject<CategoriesList>(json);
-
-            return categories;
         }
 
         List<string> CreateResultsList(QuizQuestion q)
@@ -130,32 +95,6 @@ namespace ConsoleQuiz
             return index - 1;
         }
 
-        string FetchJSON(string url)
-        {
-            try
-            {
-                var json = new WebClient().DownloadString(url);
-                return json;
-            }
-            catch (WebException we)
-            {
-                ExitApp(we.Message);
-            }
-
-            return null;
-        }
-
-        void ExitApp(params string[] messages)
-        {
-            Console.Clear();
-            foreach (var msg in messages)
-            {
-                Console.WriteLine(msg);
-            }
-            Console.WriteLine("An error has occured");
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
-            Environment.Exit(-1);
-        }
+        
     }
 }
