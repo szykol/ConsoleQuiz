@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleQuiz
 {
-    struct QuizQuestion
+    public struct QuizQuestion
     {
         public string category;
         public string type;

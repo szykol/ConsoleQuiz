@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace ConsoleQuiz
 {
-    class QuizAPI
+    public class QuizAPI
     {
         List<CategoriesList.Category> categoriesList = null;
         QuizQuestion[] questionList = null;
