@@ -40,6 +40,7 @@ namespace ConsoleQuiz.UnitTests
         {
             QuizAPI api = new QuizAPI();
 
+            api.GetCategoryList();
 
             api.SetCategory(-1);
             Assert.AreEqual(0, api.GetCategory());
