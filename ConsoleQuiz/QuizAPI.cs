@@ -32,7 +32,7 @@ namespace ConsoleQuiz
 
         public void SetCategory(int categoryListIndex)
         {
-            if (categoryListIndex > 0 && categoryListIndex <= categoriesList.Count)
+            if (categoriesList != null && categoryListIndex > 0 && categoryListIndex <= categoriesList.Count)
             {
                 categoryIndex = categoryListIndex;
             }
@@ -110,12 +110,12 @@ namespace ConsoleQuiz
         
         string GenerateAPIUrl()
         {
-            var category = categoriesList[categoryIndex];
-
             var url = this.url;
-            if ( category.name != "Any")
+            if (categoriesList != null)
             {
-                url += $"&category={category.id}";
+                var category = categoriesList[categoryIndex];
+                if ( category.name != "Any")
+                    url += $"&category={category.id}";
             }
 
             if (difficulty != Difficulty.ANY)
