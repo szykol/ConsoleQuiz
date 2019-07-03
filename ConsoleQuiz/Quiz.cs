@@ -15,11 +15,12 @@ namespace ConsoleQuiz
 
         public void Start()
         {
-            var categories = QuizAPI.GetCategoryList();
+            var quizApi = new QuizAPI();
+            var categories = quizApi.GetCategoryList();
 
             Console.WriteLine("Choose your category");
             var categoryIndex = FetchIndexFromList(categories);
-            QuizAPI.SetCategory(categoryIndex);
+            quizApi.SetCategory(categoryIndex);
 
             Console.Clear();
             Console.Write("Amount of questions: ");
@@ -29,16 +30,16 @@ namespace ConsoleQuiz
                 Console.WriteLine("Enter a valid number!");
                 Console.Write("Amount of questions: ");
             }
-            QuizAPI.SetQuestionAmount(amount);
+            quizApi.SetQuestionAmount(amount);
 
-            var diffs = QuizAPI.GetDifficultiesList();
+            var diffs = quizApi.GetDifficultiesList();
             Console.Clear();
             Console.WriteLine("Choose your difficulty");
             var diffIndex = FetchIndexFromList(diffs);
 
-            QuizAPI.SetDifficulty(diffIndex);
+            quizApi.SetDifficulty(diffIndex);
 
-            var response = QuizAPI.GetQuestions();
+            var response = quizApi.GetQuestions();
 
             foreach (QuizQuestion question in response)
             {

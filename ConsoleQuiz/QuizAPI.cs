@@ -8,19 +8,19 @@ using Newtonsoft.Json;
 
 namespace ConsoleQuiz
 {
-    static class QuizAPI
+    class QuizAPI
     {
-        static List<CategoriesList.Category> categoriesList = null;
-        static QuizQuestion[] questionList = null;
-        static string url = $"https://opentdb.com/api.php?";
+        List<CategoriesList.Category> categoriesList = null;
+        QuizQuestion[] questionList = null;
+        string url = $"https://opentdb.com/api.php?";
 
-        static int categoryIndex = 0;
-        static int questionAmount = 10;
-        static int difficultyIndex = 0;
+        int categoryIndex = 0;
+        int questionAmount = 10;
+        int difficultyIndex = 0;
 
         static List<string> difficulties = new List<string> { "Any", "Easy", "Medium", "Hard" };
 
-        public static List<string> GetCategoryList()
+        public List<string> GetCategoryList()
         {
             if (categoriesList == null)
             {
@@ -31,7 +31,7 @@ namespace ConsoleQuiz
             return categoriesList.Select(category => category.name).ToList();
         }
 
-        public static void SetCategory(int categoryListIndex)
+        public void SetCategory(int categoryListIndex)
         {
             if (categoryListIndex > 0 && categoryListIndex <= categoriesList.Count)
             {
@@ -39,12 +39,12 @@ namespace ConsoleQuiz
             }
         }
 
-        public static int GetQuestionAmount()
+        public int GetQuestionAmount()
         {
             return questionAmount;
         }
 
-        public static void SetQuestionAmount(int amount)
+        public void SetQuestionAmount(int amount)
         {
             if (amount > 0)
             {
@@ -52,12 +52,12 @@ namespace ConsoleQuiz
             }
         }
 
-        public static List<string> GetDifficultiesList()
+        public List<string> GetDifficultiesList()
         {
             return difficulties;
         }
 
-        public static void SetDifficulty(int difficultyListIndex)
+        public void SetDifficulty(int difficultyListIndex)
         {
             if (difficultyListIndex > 0 && difficultyListIndex <= difficulties.Count)
             {
@@ -78,13 +78,13 @@ namespace ConsoleQuiz
             Environment.Exit(-1);
         }
 
-        public static QuizQuestion[] GetQuestions()
+        public QuizQuestion[] GetQuestions()
         {
             questionList = DownloadQuestions();
             return questionList;
         }
 
-        static CategoriesList DownloadCategories()
+        CategoriesList DownloadCategories()
         {
             var json = FetchJSON("https://opentdb.com/api_category.php");
             var categories = JsonConvert.DeserializeObject<CategoriesList>(json);
@@ -93,7 +93,7 @@ namespace ConsoleQuiz
             return categories;
         }
 
-        static QuizQuestion[] DownloadQuestions()
+        QuizQuestion[] DownloadQuestions()
         {
             url = GenerateAPIUrl();
             var json = FetchJSON(url);
@@ -108,11 +108,11 @@ namespace ConsoleQuiz
         }
 
         
-        static string GenerateAPIUrl()
+        string GenerateAPIUrl()
         {
             var category = categoriesList[categoryIndex];
 
-            var url = QuizAPI.url;
+            var url = this.url;
             if ( category.name != "Any")
             {
                 url += $"&category={category.id}";
@@ -130,7 +130,7 @@ namespace ConsoleQuiz
             return url;
         }
 
-        static string FetchJSON(string url)
+        string FetchJSON(string url)
         {
             try
             {
