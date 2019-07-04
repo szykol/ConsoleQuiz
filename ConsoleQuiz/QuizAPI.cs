@@ -162,6 +162,10 @@ namespace ConsoleQuiz
             return response.results;
         }
         
+        /// <summary>
+        /// Helper method that generates API url
+        /// </summary>
+        /// <returns>Url for the API</returns>
         string GenerateAPIUrl()
         {
             var url = this.url;
@@ -180,6 +184,12 @@ namespace ConsoleQuiz
             return url;
         }
 
+        /// <summary>
+        /// Downloads JSON from the API. 
+        /// If an error occurs, exits the app for now
+        /// </summary>
+        /// <param name="url">url for the API</param>
+        /// <returns>JSON</returns>
         string FetchJSON(string url)
         {
             try
