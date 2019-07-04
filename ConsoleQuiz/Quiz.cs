@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace ConsoleQuiz
 {
+    /// <summary>
+    /// Handles the interaction with the user.
+    /// Uses the QuizAPI to get questions
+    /// </summary>
     class Quiz
     {
         Random random = new Random();
@@ -13,6 +17,9 @@ namespace ConsoleQuiz
 
         public delegate object toPrint<T>(T obj);
 
+        /// <summary>
+        /// Starts the quiz game
+        /// </summary>
         public void Start()
         {
             var quizApi = new QuizAPI();
@@ -64,6 +71,11 @@ namespace ConsoleQuiz
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// Gets all answers and generates a list of them
+        /// </summary>
+        /// <param name="q">QuizQuestion struct used for holding the question data</param>
+        /// <returns>List of all possible answers</returns>
         List<string> CreateResultsList(QuizQuestion q)
         {
             var answers = new List<string>();
@@ -73,6 +85,15 @@ namespace ConsoleQuiz
             return answers;
         }
 
+        /// <summary>
+        /// Helper method that prints contents of list
+        /// and uses another helper method to get the
+        /// validated index from the user
+        /// </summary>
+        /// <typeparam name="T">Any type that is held in the List</typeparam>
+        /// <param name="list">List</param>
+        /// <param name="f">Function that returns what should be print in the console</param>
+        /// <returns>Returns the list index</returns>
         int FetchIndexFromList<T>(List<T> list, toPrint<T> f = null)
         {
             var i = 0;
@@ -87,6 +108,13 @@ namespace ConsoleQuiz
             return FetchFromConsole(list);
         }
 
+        /// <summary>
+        /// Helper method that gets correct index of 
+        /// the list
+        /// </summary>
+        /// <typeparam name="T">Any type that is held in the List</typeparam>
+        /// <param name="list">List</param>
+        /// <returns>Returns the list index</returns>
         int FetchFromConsole<T>(List<T> list)
         {
             Console.Write("> ");
