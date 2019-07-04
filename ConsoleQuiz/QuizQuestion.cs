@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleQuiz
 {
+    /// <summary>
+    /// Basic struct that holds all question data.
+    /// </summary>
     public struct QuizQuestion
     {
         public string category;
