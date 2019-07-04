@@ -11,11 +11,11 @@ namespace ConsoleQuiz
     /// </summary>
     public struct QuizQuestion
     {
-        public string category;
-        public string type;
-        public string difficulty;
-        public string question;
-        public string correct_answer;
-        public string[] incorrect_answers;
+        public string Category {get; set; }
+        public string Type { get; set; }
+        public string Difficulty {get; set; }
+        public string Question {get; set; }
+        public string CorrectAnswer {get; set; }
+        public string[] IncorrectAnswers {get; set; }
     }
 }

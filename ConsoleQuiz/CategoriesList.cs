@@ -19,6 +19,6 @@ namespace ConsoleQuiz
             public string name;
         }
 
-        public List<Category> trivia_categories;
+        public List<Category> Categories { set; get; }
     }
 }
