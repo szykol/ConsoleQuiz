@@ -52,7 +52,7 @@ namespace ConsoleQuiz
                 Console.Clear();
 
                 var question = qManager.NextQuestion();
-                Console.WriteLine($"Question #{questionNumber++}: {question.question} | Score [{qManager.Score}/{qManager.Count}]");
+                Console.WriteLine($"Question #{questionNumber++}: {question.Question} | Score [{qManager.Score}/{qManager.Count}]");
 
                 var answers = CreateResultsList(question);
                 var index = FetchIndexFromList(answers);
@@ -79,8 +79,8 @@ namespace ConsoleQuiz
         List<string> CreateResultsList(QuizQuestion q)
         {
             var answers = new List<string>();
-            answers.AddRange(q.incorrect_answers);
-            answers.Insert(random.Next(0, answers.Count() + 1), q.correct_answer);
+            answers.AddRange(q.IncorrectAnswers);
+            answers.Insert(random.Next(0, answers.Count() + 1), q.CorrectAnswer);
 
             return answers;
         }

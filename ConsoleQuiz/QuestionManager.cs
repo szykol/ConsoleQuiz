@@ -63,7 +63,7 @@ namespace ConsoleQuiz
         /// <returns>True if answer is correct</returns>
         public bool CheckAnswer(string answer)
         {
-            if (currentQuestionIndex >= 0 && lastAnsweredQuestionIndex != currentQuestionIndex && CurrentQuestion().correct_answer == answer)
+            if (currentQuestionIndex >= 0 && lastAnsweredQuestionIndex != currentQuestionIndex && CurrentQuestion().CorrectAnswer == answer)
             {
                 score++;
                 lastAnsweredQuestionIndex = currentQuestionIndex;

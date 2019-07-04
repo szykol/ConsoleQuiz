@@ -28,7 +28,7 @@ namespace ConsoleQuiz
         {
             if (categoriesList == null)
             {
-                categoriesList = DownloadCategories().trivia_categories;
+                categoriesList = DownloadCategories().Categories;
                 categoriesList.Insert(0, new CategoriesList.Category() { name = "Any" });
             }
 
