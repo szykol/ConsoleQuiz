@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleQuiz
 {
+    /// <summary>
+    /// Struct used to parse the json.
+    /// Holds the list of categories with their name
+    /// and their ids.
+    /// </summary>
     struct CategoriesList
     {
         public struct Category
