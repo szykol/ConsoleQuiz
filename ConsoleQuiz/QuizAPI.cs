@@ -148,7 +148,7 @@ namespace ConsoleQuiz
                 Categories = array.Select(cat => new CategoriesList.Category()
                 {
                     id = (string)cat["id"],
-                    name = WebUtility.HtmlEncode((string)cat["name"])
+                    name = WebUtility.HtmlDecode((string)cat["name"])
                 }).ToList()
             };
         }
@@ -159,7 +159,7 @@ namespace ConsoleQuiz
         /// <returns>Array of questions</returns>
         QuizQuestion[] DownloadQuestions()
         {
-            Func<string, string> decode = s => WebUtility.HtmlEncode((string)s);
+            Func<string, string> decode = s => WebUtility.HtmlDecode((string)s);
 
             url = GenerateAPIUrl();
             var json = FetchJSON(url);
