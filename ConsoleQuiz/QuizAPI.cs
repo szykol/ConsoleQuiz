@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ConsoleQuiz
 {
@@ -138,10 +139,18 @@ namespace ConsoleQuiz
         CategoriesList DownloadCategories()
         {
             var json = FetchJSON("https://opentdb.com/api_category.php");
-            var categories = JsonConvert.DeserializeObject<CategoriesList>(json);
+            var categories = JObject.Parse(json);
 
-           
-            return categories;
+            JArray array = (JArray)categories["trivia_categories"];
+
+            return new CategoriesList()
+            {
+                Categories = array.Select(cat => new CategoriesList.Category()
+                {
+                    id = (string)cat["id"],
+                    name = WebUtility.HtmlEncode((string)cat["name"])
+                }).ToList()
+            };
         }
 
         /// <summary>
@@ -150,16 +159,28 @@ namespace ConsoleQuiz
         /// <returns>Array of questions</returns>
         QuizQuestion[] DownloadQuestions()
         {
+            Func<string, string> decode = s => WebUtility.HtmlEncode((string)s);
+
             url = GenerateAPIUrl();
             var json = FetchJSON(url);
-            var response = JsonConvert.DeserializeObject<QuizResponse>(json);
+            var response = JObject.Parse(json);
 
-            if (response.response_code != 0)
+
+            if ((int)response["response_code"] != 0)
             {
                 QuizAPI.ExitApp("Invalid response. Questions could not be downloaded.");
             }
 
-            return response.results;
+            JArray questionArray = (JArray)response["results"];
+            return questionArray.Select(q => new QuizQuestion()
+            {
+                Category = decode((string)q["category"]),
+                Type = decode((string)q["type"]),
+                Difficulty = decode((string)q["difficulty"]),
+                Question = decode((string)q["question"]),
+                CorrectAnswer = decode((string)q["correct_answer"]),
+                IncorrectAnswers = ((JArray)q["incorrect_answers"]).Select(cat => decode((string)cat)).ToArray()
+            }).ToArray();
         }
         
         /// <summary>
